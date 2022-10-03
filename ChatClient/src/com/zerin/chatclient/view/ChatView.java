@@ -41,7 +41,6 @@ public class ChatView {
                             key = ScannerUtility.readString(1);
                             switch (key) {
                                 case "1":
-                                    System.out.println("fuck");
                                     userClientService.onlineFriendList();
                                     break;
                                 case "2":
@@ -68,13 +67,13 @@ public class ChatView {
                                     break;
                                 case "0":
                                     //调用方法，给服务器发送一个退出系统的message
-                                    //userClientService.logout();
+                                    userClientService.logout();
                                     loop = false;
                                     break;
                             }
                         }
                     } else {
-                        System.out.println("failed to login in");
+                        System.out.println("Failed to login in");
                     }
                     break;
                 case "0":

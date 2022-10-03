@@ -20,12 +20,9 @@ public class ChatServer {
     private static ConcurrentHashMap<String,User> validUsers=new ConcurrentHashMap<>();
 
     static {
-        validUsers.put("01",new User("01","01"));
-        validUsers.put("02",new User("02","02"));
-        validUsers.put("03",new User("03","03"));
-        validUsers.put("your dad",new User("your dad","your dad"));
-        validUsers.put("fucker",new User("fucker","fucker"));
-        validUsers.put("fyfy",new User("fyfy","fyfy"));
+        validUsers.put("cs",new User("cs","cs"));
+        validUsers.put("vs",new User("vs","vs"));
+        validUsers.put("bs",new User("bs","bs"));
     }
 
     private boolean checkUser(String userId,String pwd){
@@ -54,10 +51,10 @@ public class ChatServer {
                 if (checkUser(u.getUserId(),u.getPasswd())) {
                     msg.setMesType(MessageType.MESSAGE_LOGIN_SUCCEED);
                     oos.writeObject(msg);
-                    ServiceThread serviceThread = new ServiceThread(socket, u.getUserId());
+                    ServerThread serviceThread = new ServerThread(socket, u.getUserId());
                     // nm 一定要启动
                     serviceThread.start();
-                    ManageServiceThread.addServiceThread(u.getUserId(), serviceThread);
+                    ManageServerThread.addServerThread(u.getUserId(), serviceThread);
                     System.out.println("User id=" + u.getUserId() + " pwd=" + u.getPasswd() + " succeed to login in");
                     //todo why sout sequence is random
                 } else {

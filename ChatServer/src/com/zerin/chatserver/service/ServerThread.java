@@ -10,11 +10,11 @@ import java.net.Socket;
 /**
  * 该类的一个对象和某个客户端保持通信
  */
-public class ServiceThread extends Thread {
+public class ServerThread extends Thread {
     private Socket socket;
     private String userId;
 
-    public ServiceThread(Socket socket, String userid) {
+    public ServerThread(Socket socket, String userid) {
         this.socket = socket;
         this.userId = userid;
     }
@@ -31,8 +31,8 @@ public class ServiceThread extends Thread {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 Message msg = (Message) ois.readObject();
                 if (msg.getMesType().equals(MessageType.MESSAGE_GET_ONLINE_USER)) {
-                    System.out.println(msg.getSender() + " Request to get user list");
-                    String onlineUser = ManageServiceThread.getOnlineUser();
+                    System.out.println("User "+msg.getSender() + " Request to get user list");
+                    String onlineUser = ManageServerThread.getOnlineUser();
                     // must use Message send to client
                     Message msg2 = new Message();
                     msg2.setMesType(MessageType.MESSAGE_RET_ONLINE_USER);
@@ -41,14 +41,18 @@ public class ServiceThread extends Thread {
                     // return to client via stream
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     oos.writeObject(msg2);
+                }else if(msg.getMesType().equals(MessageType.MESSAGE_CLIENT_EXIT)){
+                    System.out.println("User "+msg.getSender()+" logout");
+                    ManageServerThread.removeServerThraed(msg.getSender());
+                    socket.close();
+                    break;
+                } else {
+                    System.out.println("Undefined message detected");
                 }
-
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
-
 }

@@ -9,6 +9,10 @@ public class ManageClientThread {
         map.put(userId, clientThread);
     }
 
+    public static void removeClientThraed(String userId){
+        map.remove(userId);
+    }
+
     public static ClientThread getClientThread(String userId) {
         return map.get(userId);
     }

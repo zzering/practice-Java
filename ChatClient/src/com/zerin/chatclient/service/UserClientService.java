@@ -11,28 +11,29 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class UserClientService {
-    private User u=new User();
-    private Socket socket;
+    // 因为我们可能在其他地方用使用user信息, 因此作出成员属性
+    private User u = new User();
+    private Socket socket;// 因为这里只有一个线程 所以可用方法一
 
-    public boolean checkUser(String userId,String pwd){
-        boolean state=false;
+    public boolean checkUser(String userId, String pwd) {
+        boolean state = false;
         u.setUserId(userId);
         u.setPasswd(pwd);
-        try{
+        try {
             // 连接到服务端
-            socket= new Socket(InetAddress.getLocalHost(),8888);
-            ObjectOutputStream oos=new ObjectOutputStream(socket.getOutputStream());
+            socket = new Socket(InetAddress.getLocalHost(), 9999);
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(u);
             //read from server
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             Message msg = (Message) ois.readObject();
-            if(msg.getMesType().equals(MessageType.MESSAGE_LOGIN_SUCCEED)){
-                ClientThread ccst=new ClientThread(socket);
+            if (msg.getMesType().equals(MessageType.MESSAGE_LOGIN_SUCCEED)) {
+                ClientThread ccst = new ClientThread(socket);
                 ccst.start();
                 //这里为了后面客户端的扩展，我们将线程放入到集合管理
-                ManageClientThread.addClientThread(userId,ccst);
-                state=true;
-            }else {
+                ManageClientThread.addClientThread(userId, ccst);
+                state = true;
+            } else {
                 //如果登录失败, 我们就不能启动和服务器通信的线程, 关闭socket
                 socket.close();
             }
@@ -42,8 +43,8 @@ public class UserClientService {
         return state;
     }
 
-    public void onlineFriendList(){
-        Message msg=new Message();
+    public void onlineFriendList() {
+        Message msg = new Message();
         msg.setMesType(MessageType.MESSAGE_GET_ONLINE_FRIEND);
         msg.setSender(u.getUserId());
         try {
@@ -58,4 +59,19 @@ public class UserClientService {
         }
     }
 
+    public void logout() {
+        Message msg = new Message();
+        msg.setMesType(MessageType.MESSAGE_CLIENT_EXIT);
+        msg.setSender(u.getUserId());
+        try {
+            //ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());// 方法一 只适用于单个socket
+            ObjectOutputStream oos = new ObjectOutputStream(
+                    ManageClientThread.getClientThread(u.getUserId()).getSocket().getOutputStream());// 方法二 适用于多个socket
+            oos.writeObject(msg);
+            System.out.println("User "+u.getUserId() + " logout");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

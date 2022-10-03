@@ -6,15 +6,19 @@ import java.util.Iterator;
 /**
  * 使用HashMap管理线程
  */
-public class ManageServiceThread {
-    private static HashMap<String, ServiceThread> map = new HashMap<>();
+public class ManageServerThread {
+    private static HashMap<String, ServerThread> map = new HashMap<>();
 
-    public static void addServiceThread(String userId, ServiceThread serviceThread) {
+    public static void addServerThread(String userId, ServerThread serviceThread) {
         map.put(userId, serviceThread);
     }
 
-    public static ServiceThread getServiceThread(String userId) {
+    public static ServerThread getServerThread(String userId) {
         return map.get(userId);
+    }
+
+    public static void removeServerThraed(String userId){
+        map.remove(userId);
     }
 
     public static String getOnlineUser(){

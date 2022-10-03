@@ -3,6 +3,7 @@ package com.zerin.chatclient.service;
 import com.zerin.chatcommon.Message;
 import com.zerin.chatcommon.MessageType;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
@@ -21,7 +22,7 @@ public class ClientThread extends Thread {
     public void run() {
         while (true){
             try {
-                //System.out.println("客户端线程，等待从读取从服务器端发送的消息中");
+                System.out.println("客户端线程，等待从读取从服务器端发送的消息中");
                 ObjectInputStream ios=new ObjectInputStream(socket.getInputStream());
                 //如果服务器没有发送Message对象,线程会阻塞在这里
                 Message msg = (Message) ios.readObject();
@@ -32,10 +33,13 @@ public class ClientThread extends Thread {
                         System.out.println("User: " + onlineUsers[i]);
                     }
 
-
+                }else{
+                    System.out.println("Undefined message detected");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Thread killed");
+                break;
+                //e.printStackTrace();
             }
         }
     }
