@@ -6,7 +6,7 @@ public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
     private String sender;
     private String getter;
-    private String contend;
+    private String content;
     private String sendTime;
     private String mesType;
 
@@ -30,12 +30,12 @@ public class Message implements Serializable {
         this.getter = getter;
     }
 
-    public String getContend() {
-        return contend;
+    public String getContent() {
+        return content;
     }
 
-    public void setContend(String contend) {
-        this.contend = contend;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getSendTime() {

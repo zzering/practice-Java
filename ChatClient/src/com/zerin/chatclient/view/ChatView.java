@@ -1,5 +1,6 @@
 package com.zerin.chatclient.view;
 
+import com.zerin.chatclient.service.MessageClientService;
 import com.zerin.chatclient.service.UserClientService;
 import com.zerin.chatclient.utils.ScannerUtility;
 
@@ -8,6 +9,7 @@ public class ChatView {
     private boolean loop = true;// 控制是否显示菜单
     private String key = "";// 接收用户的键盘输入
     private UserClientService userClientService = new UserClientService();// 对象是用于登录服务/注册用户
+    private MessageClientService messageClientService =new MessageClientService();// 用于消息服务
 
     public static void main(String[] args) {
         new ChatView().mainMenu();
@@ -44,17 +46,17 @@ public class ChatView {
                                     userClientService.onlineFriendList();
                                     break;
                                 case "2":
-                                    System.out.println("请输入想对大家说的话: ");
+                                    System.out.println("Please enter the message to everyone: ");
                                     String s = ScannerUtility.readString(100);
-                                    //messageClientService.sendMessageToAll(s, userId);
+                                    messageClientService.sendMessageToAll(s, userId);
                                     break;
                                 case "3":
-                                    System.out.print("请输入想聊天的用户号(在线): ");
+                                    System.out.print("Please enter the user that you want to chat with: ");
                                     String getterId = ScannerUtility.readString(50);
-                                    System.out.print("请输入想说的话: ");
+                                    System.out.print("Please enter the message: ");
                                     String content = ScannerUtility.readString(100);
                                     //编写一个方法，将消息发送给服务器端
-                                    //messageClientService.sendMessageToOne(content, userId, getterId);
+                                    messageClientService.sendMessageToOne(content, userId, getterId);
                                     break;
                                 case "4":
                                     System.out.print("请输入你想把文件发送给的用户(在线用户): ");

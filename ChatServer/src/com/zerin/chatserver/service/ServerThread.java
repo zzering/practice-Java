@@ -30,13 +30,12 @@ public class ServerThread extends Thread {
                 System.out.println("Server and Client(" + userId + ") is maintaining its communication...");
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 Message msg = (Message) ois.readObject();
-                if (msg.getMesType().equals(MessageType.MESSAGE_GET_ONLINE_USER)) {
+                if (msg.getMesType().equals(MessageType.MESSAGE_GET_ONLINE_FRIEND)) {
                     System.out.println("User "+msg.getSender() + " Request to get user list");
                     String onlineUser = ManageServerThread.getOnlineUser();
-                    // must use Message send to client
                     Message msg2 = new Message();
-                    msg2.setMesType(MessageType.MESSAGE_RET_ONLINE_USER);
-                    msg2.setContend(onlineUser);
+                    msg2.setMesType(MessageType.MESSAGE_RET_ONLINE_FRIEND);
+                    msg2.setContent(onlineUser);
                     msg2.setGetter(msg.getSender());
                     // return to client via stream
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
@@ -46,7 +45,11 @@ public class ServerThread extends Thread {
                     ManageServerThread.removeServerThraed(msg.getSender());
                     socket.close();
                     break;
-                } else {
+                } else if(msg.getMesType().equals(MessageType.MESSAGE_COMM_MES)) {
+                    String sender = msg.getSender();
+
+
+                }else {
                     System.out.println("Undefined message detected");
                 }
 

@@ -33,7 +33,7 @@ public class UserClientService {
                 //这里为了后面客户端的扩展，我们将线程放入到集合管理
                 ManageClientThread.addClientThread(userId, ccst);
                 state = true;
-            } else {
+            } else if(msg.getMesType().equals(MessageType.MESSAGE_LOGIN_FAILED)){
                 //如果登录失败, 我们就不能启动和服务器通信的线程, 关闭socket
                 socket.close();
             }
@@ -45,7 +45,7 @@ public class UserClientService {
 
     public void onlineFriendList() {
         Message msg = new Message();
-        msg.setMesType(MessageType.MESSAGE_GET_ONLINE_FRIEND);
+        msg.setMesType(MessageType.MESSAGE_GET_ONLINE_USER);
         msg.setSender(u.getUserId());
         try {
             //从管理线程的集合中，通过userId, 得到这个线程对象
