@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class MessageClientService {
 
+    // todo 待添加功能 发消息前验证用户是否在线 verifyIsUserOnline
     public void sendMessageToOne(String content, String senderId, String getterId) {
         Message msg = new Message();
         msg.setMesType(MessageType.MESSAGE_TO_ALL_MES);
@@ -16,7 +17,6 @@ public class MessageClientService {
         msg.setContent(content);
         msg.setSendTime(new Date().toString());
         System.out.println(senderId + " said to " + getterId + ": " + content);
-
         try {
             ObjectOutputStream oos = new ObjectOutputStream(
                     ManageClientThread.getClientThread(senderId).getSocket().getOutputStream()
@@ -43,5 +43,9 @@ public class MessageClientService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean verifyIsUserOnline(){
+        return false;
     }
 }

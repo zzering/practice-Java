@@ -8,5 +8,6 @@ public interface MessageType {
     String MESSAGE_CLIENT_EXIT = "5";//客户端请求退出
     String MESSAGE_COMM_MES = "6"; //普通信息包
     String MESSAGE_TO_ALL_MES = "7"; //群发消息报
+    String MESSAGE_FILE_MES="8";
 
 }
