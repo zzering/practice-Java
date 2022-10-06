@@ -38,18 +38,20 @@ public class ServerThread extends Thread {
                     msg2.setContent(onlineUser);
                     msg2.setGetter(msg.getSender());
                     // return to client via stream
+                    // todo 理解下这里的oos 能否 ManageServerThread.getServerThread(msg.getGetter()).getSocket().getOutputStream()
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     oos.writeObject(msg2);
+                }else if(msg.getMesType().equals(MessageType.MESSAGE_FILE_MES)) {
+                    ObjectOutputStream oos = new ObjectOutputStream(
+                            ManageServerThread.getServerThread(msg.getGetter()).getSocket().getOutputStream()
+                    );
+                    oos.writeObject(msg);
                 }else if(msg.getMesType().equals(MessageType.MESSAGE_CLIENT_EXIT)){
                     System.out.println("User "+msg.getSender()+" logout");
                     ManageServerThread.removeServerThraed(msg.getSender());
                     socket.close();
                     break;
-                } else if(msg.getMesType().equals(MessageType.MESSAGE_COMM_MES)) {
-                    String sender = msg.getSender();
-
-
-                }else {
+                } else {
                     System.out.println("Undefined message detected");
                 }
 

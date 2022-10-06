@@ -3,6 +3,7 @@ package com.zerin.chatclient.service;
 import com.zerin.chatcommon.Message;
 import com.zerin.chatcommon.MessageType;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -23,7 +24,7 @@ public class ClientThread extends Thread {
 
             while (true) {
                 try {
-                System.out.println("客户端线程，等待从读取从服务器端发送的消息中");
+                System.out.println("Client thread is waiting the messages form Server...");
                 ObjectInputStream ios = new ObjectInputStream(socket.getInputStream());
                 //如果服务器没有发送Message对象,线程会阻塞在这里
                 Message msg = (Message) ios.readObject();
@@ -34,11 +35,20 @@ public class ClientThread extends Thread {
                         System.out.println("User: " + onlineUsers[i]);
                     }
                 } else if (msg.getMesType().equals(MessageType.MESSAGE_COMM_MES)) {
-                    System.out.println("\n" + msg.getSender() + " 对 " + msg.getGetter() + " 说: " + msg.getContent());
+                    System.out.println("\n" + msg.getSender() + " said to " + msg.getGetter() + " : " + msg.getContent());
                 } else if (msg.getMesType().equals(MessageType.MESSAGE_TO_ALL_MES)) {
                     //显示在客户端的控制台
-                    System.out.println("\n" + msg.getSender() + " 对大家说: " + msg.getContent());
-                } else {
+                    System.out.println("\n" + msg.getSender() + " said to everyone: " + msg.getContent());
+                } else if(msg.getMesType().equals(MessageType.MESSAGE_FILE_MES)){
+                    System.out.println("\n" + msg.getSender() + " send file: " + msg.getSrc() + " to: "+ msg.getGetter());
+                    System.out.println("\nPath to save the file: " + msg.getDest());
+                    //取出message的文件字节数组，通过文件输出流写出到磁盘
+                    FileOutputStream fos = new FileOutputStream(msg.getDest(), true);
+                    fos.write(msg.getFileBytes());
+                    fos.close();
+                    System.out.println("\n File saved successfully");
+                }
+                else {
                     System.out.println("Undefined message detected");
                 }
             } catch (IOException | ClassNotFoundException e) {
