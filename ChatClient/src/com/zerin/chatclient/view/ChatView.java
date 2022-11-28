@@ -10,8 +10,8 @@ public class ChatView {
     private boolean loop = true;// 控制是否显示菜单
     private String key = "";// 接收用户的键盘输入
     private UserClientService userClientService = new UserClientService();// 对象是用于登录服务/注册用户
-    private MessageClientService messageClientService =new MessageClientService();// 用于消息服务
-    private FileClientService fileClientService=new FileClientService();// 用于文件服务
+    private MessageClientService messageClientService = new MessageClientService();// 用于消息服务
+    private FileClientService fileClientService = new FileClientService();// 用于文件服务
 
     public static void main(String[] args) {
         new ChatView().mainMenu();
@@ -66,7 +66,7 @@ public class ChatView {
                                     String src = ScannerUtility.readString(100);
                                     System.out.print("Please enter the destination of the file(like d:\\yy.jpg)");
                                     String dest = ScannerUtility.readString(100);
-                                    fileClientService.sendFileToOne(src,dest,userId,getterId);
+                                    fileClientService.sendFileToOne(src, dest, userId, getterId);
                                     break;
                                 case "0":
                                     userClientService.logout();

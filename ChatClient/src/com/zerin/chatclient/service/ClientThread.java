@@ -22,8 +22,8 @@ public class ClientThread extends Thread {
     @Override
     public void run() {
 
-            while (true) {
-                try {
+        while (true) {
+            try {
                 System.out.println("Client thread is waiting the messages form Server...");
                 ObjectInputStream ios = new ObjectInputStream(socket.getInputStream());
                 //如果服务器没有发送Message对象,线程会阻塞在这里
@@ -39,16 +39,19 @@ public class ClientThread extends Thread {
                 } else if (msg.getMesType().equals(MessageType.MESSAGE_TO_ALL_MES)) {
                     //显示在客户端的控制台
                     System.out.println("\n" + msg.getSender() + " said to everyone: " + msg.getContent());
-                } else if(msg.getMesType().equals(MessageType.MESSAGE_FILE_MES)){
-                    System.out.println("\n" + msg.getSender() + " send file: " + msg.getSrc() + " to: "+ msg.getGetter());
+                } else if (msg.getMesType().equals(MessageType.MESSAGE_FILE_MES)) {
+                    System.out.println("\n" + msg.getSender() + " send file: " + msg.getSrc() + " to: " + msg.getGetter());
                     System.out.println("\nPath to save the file: " + msg.getDest());
                     //取出message的文件字节数组，通过文件输出流写出到磁盘
-                    FileOutputStream fos = new FileOutputStream(msg.getDest(), true);
+
+                    // 创建文件输出流 绑定输出到des处
+                    FileOutputStream fos = new FileOutputStream(msg.getDest());
+                    // 将空壳+信息写入到des处
                     fos.write(msg.getFileBytes());
                     fos.close();
-                    System.out.println("\n File saved successfully");
-                }
-                else {
+
+                    System.out.println("\nFile saved successfully");
+                } else {
                     System.out.println("Undefined message detected");
                 }
             } catch (IOException | ClassNotFoundException e) {
