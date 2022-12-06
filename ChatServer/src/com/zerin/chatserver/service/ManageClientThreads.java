@@ -6,23 +6,26 @@ import java.util.Iterator;
 /**
  * 使用HashMap管理线程
  */
-public class ManageServerThread {
-    private static HashMap<String, ServerThread> map = new HashMap<>();
+public class ManageClientThreads {
+    private static HashMap<String, ServerThread> hm = new HashMap<>();
 
+    public static HashMap<String,ServerThread> getHm(){
+        return hm;
+    }
     public static void addServerThread(String userId, ServerThread serviceThread) {
-        map.put(userId, serviceThread);
+        hm.put(userId, serviceThread);
     }
 
     public static ServerThread getServerThread(String userId) {
-        return map.get(userId);
+        return hm.get(userId);
     }
 
     public static void removeServerThraed(String userId){
-        map.remove(userId);
+        hm.remove(userId);
     }
 
     public static String getOnlineUser(){
-        Iterator<String> iterator = map.keySet().iterator();
+        Iterator<String> iterator = hm.keySet().iterator();
         StringBuilder onlineUserList = new StringBuilder();
         while(iterator.hasNext()){
             onlineUserList.append(iterator.next()).append(" ");
